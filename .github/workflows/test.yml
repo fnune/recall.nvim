@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and Neovim
+        run: |
+          apk update
+          apk add neovim git curl
+
+      - name: Install Plenary
+        run: |
+          mkdir -p ~/.config/nvim/pack/plenary/start
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git ~/.config/nvim/pack/plenary/start/plenary.nvim
+
+      - name: Run tests
+        run: |
+          nvim --headless -c "PlenaryBustedFile tests/init.lua"
