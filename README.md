@@ -24,6 +24,20 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 
 [marks]: https://neovim.io/doc/user/motion.html#mark-motions
 
+<!-- vim-markdown-toc GFM -->
+
+* [Planned features](#planned-features)
+* [Installation](#installation)
+  * [Telescope integration](#telescope-integration)
+  * [The `wshada` option](#the-wshada-option)
+  * [Usage commands](#usage-commands)
+    * [Navigation logic](#navigation-logic)
+* [Inspirations](#inspirations)
+* [Contributions](#contributions)
+* [Licensing](#licensing)
+
+<!-- vim-markdown-toc -->
+
 ## Planned features
 
 - [x] Basic global mark management with `:Recall{Toggle,Mark,Unmark}` and
