@@ -26,7 +26,7 @@ M.current_pos_if_mark = function(marks, current_pos, current_bufnr)
 end
 
 M.find_mark = function(direction)
-  local marks = utils.get_sorted_global_marks()
+  local marks = utils.sorted_global_marks()
   if #marks == 0 then
     return nil
   end

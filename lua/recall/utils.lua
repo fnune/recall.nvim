@@ -12,7 +12,7 @@ M.print_table = function(t, indent)
   end
 end
 
-M.iterate_global_marks = function(callback)
+M.for_each_global_mark = function(callback)
   local marks = vim.fn.getmarklist()
 
   for _, mark_info in ipairs(marks) do
@@ -25,9 +25,9 @@ M.iterate_global_marks = function(callback)
   end
 end
 
-M.get_sorted_global_marks = function()
+M.sorted_global_marks = function()
   local marks = {}
-  M.iterate_global_marks(function(char, info)
+  M.for_each_global_mark(function(char, info)
     table.insert(marks, { char = char, info = info })
   end)
   table.sort(marks, function(a, b)

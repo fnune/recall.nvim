@@ -6,7 +6,7 @@ local M = {}
 M.refresh_signs = function()
   vim.fn.sign_unplace("*", { group = "RecallMark" })
 
-  utils.iterate_global_marks(function(char, info)
+  utils.for_each_global_mark(function(char, info)
     local bufnr = info.pos[1]
     local lnum = info.pos[2]
     if bufnr and bufnr > 0 and lnum then
@@ -43,7 +43,7 @@ M.remove_mark_if_exists = function()
   local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
   local mark_removed = false
 
-  utils.iterate_global_marks(function(char, info)
+  utils.for_each_global_mark(function(char, info)
     if info.pos[1] == bufnr and info.pos[2] == row then
       vim.cmd("delmarks " .. char)
       mark_removed = true

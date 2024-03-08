@@ -4,6 +4,16 @@ M.opts = {
   sign = "",
   sign_highlight = "@comment.note",
 
+  telescope = {
+    autoload = true,
+    mappings = {
+      unmark_selected_entry = {
+        normal = "dd",
+        insert = "<C-m>",
+      },
+    },
+  },
+
   -- https://github.com/neovim/neovim/issues/4295
   -- https://github.com/neovim/neovim/pull/24936 (0.10-only)
   wshada = vim.fn.has("nvim-0.10") == 0,
@@ -19,9 +29,15 @@ function M.setup(opts)
     group = augroup,
     pattern = "*",
     callback = function()
-      require("recall.marks").refresh_signs()
+      require("recall.marking").refresh_signs()
     end,
   })
+
+  if M.opts.telescope.autoload then
+    vim.schedule(function()
+      require("recall.telescope").autoload()
+    end)
+  end
 end
 
 return M

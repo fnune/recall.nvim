@@ -1,5 +1,5 @@
 local config = require("recall.config")
-local marks = require("recall.marks")
+local marking = require("recall.marking")
 local navigation = require("recall.navigation")
 
 local M = {}
@@ -17,19 +17,19 @@ function M.goto_prev()
 end
 
 function M.mark()
-  marks.set_global_mark()
+  marking.set_global_mark()
 end
 
 function M.unmark()
-  marks.unset_global_mark()
+  marking.unset_global_mark()
 end
 
 function M.toggle()
-  marks.toggle_global_mark()
+  marking.toggle_global_mark()
 end
 
 function M.clear()
-  marks.clear_all_global_marks()
+  marking.clear_all_global_marks()
 end
 
 vim.api.nvim_create_user_command("RecallMark", M.mark, {})

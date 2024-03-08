@@ -17,6 +17,10 @@ Its enhancements are strictly additive to Neovim's existing mark features,
 which you can continue to use to their fullest potential.
 
 ![recall](./recall.png)
+_Recall showing two global marks and available commands._
+
+![recall telescope](./recall-telescope.png)
+_Telescope integration using `:Telescope recall theme=ivy`._
 
 [marks]: https://neovim.io/doc/user/motion.html#mark-motions
 
@@ -27,7 +31,7 @@ which you can continue to use to their fullest potential.
 - [x] Basic global mark navigation with `:Recall{Next,Previous}`
 - [x] Sign column with a customizable character
 - [x] Support for Neovim 0.10.x and also 0.9.x and lower
-- [ ] Telescope integration beyond the built-in `:Telescope marks` that allows
+- [x] Telescope integration beyond the built-in `:Telescope marks` that allows
       mark deletion and displaying only global marks
 - [ ] Improved stability by adding CI and testing using
       [plenary][plenary-tests]
@@ -48,6 +52,17 @@ But you can customize it. Here are the default options:
 require("recall").setup({
   sign = "",
   sign_highlight = "@comment.note",
+
+  telescope = {
+    autoload = true,
+    mappings = {
+      unmark_selected_entry = {
+        normal = "dd",
+        insert = "<C-m>",
+      },
+    },
+  },
+
   wshada = vim.fn.has("nvim-0.10") == 0,
 })
 ```
@@ -60,18 +75,20 @@ the user commands that ship with it.
 
 ```lua
 -- Using commands:
-vim.keymap.set('n', '<leader>mm', ':RecallToggle<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mn', ':RecallNext<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mp', ':RecallPrevious<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mc', ':RecallClear<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mm", ":RecallToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mn", ":RecallNext<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mp", ":RecallPrevious<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mc", ":RecallClear<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, silent = true })
 
 -- Using the Lua API:
-local recall = require('recall')
+local recall = require("recall")
 
-vim.keymap.set('n', '<leader>mm', recall.toggle, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mn', recall.goto_next, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mp', recall.goto_prev, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>mc', recall.clear, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mm", recall.toggle, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mn", recall.goto_next, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mp", recall.goto_prev, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>mc", recall.clear, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, silent = true })
 ```
 
 </details>
@@ -88,14 +105,53 @@ vim.keymap.set('n', '<leader>mc', recall.clear, { noremap = true, silent = true 
     recall.setup({})
 
     vim.keymap.set("n", "<leader>mm", recall.toggle, { noremap = true, silent = true })
-    vim.keymap.set('n', "<leader>mn", recall.goto_next, { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>mn", recall.goto_next, { noremap = true, silent = true })
     vim.keymap.set("n", "<leader>mp", recall.goto_prev, { noremap = true, silent = true })
     vim.keymap.set("n", "<leader>mc", recall.clear, { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, silent = true })
   end
 }
 ```
 
 </details>
+
+### Telescope integration
+
+If you have Telescope installed, Recall will loads its extension so that you
+can use `:Telescope recall`. Within the Recall Telescope picker, you can use
+`dd` in normal mode or `<C-m>` in insert mode to delete the selected global
+mark.
+
+To open the Recall Telescope picker, use `:Telecope recall`. You can pass a
+`theme` option with a Telescope built-in theme such as `:Telescope recall
+theme=ivy`.
+
+To change or unset the default mappings, use:
+
+```lua
+require("recall").setup({
+  telescope = {
+    mappings = {
+      unmark_selected_entry = {
+        normal = "d",
+        insert = nil,
+      },
+    },
+  },
+})
+```
+
+If you prefer loading the Recall Telescope extension manually, do this:
+
+```lua
+require("recall").setup({
+  telescope = {
+    autoload = false,
+  },
+})
+
+require("telescope").load_extension("recall")
+```
 
 ### The `wshada` option
 
