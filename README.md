@@ -30,6 +30,7 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 
 * [Installation](#installation)
   * [Telescope integration](#telescope-integration)
+  * [Project-specific global marks](#project-specific-global-marks)
   * [The `wshada` option](#the-wshada-option)
   * [Usage commands](#usage-commands)
     * [Navigation logic](#navigation-logic)
@@ -154,6 +155,29 @@ require("recall").setup({
 
 require("telescope").load_extension("recall")
 ```
+
+### Project-specific global marks
+
+Neovim stores global mark information in the [`shada` file][shada-docs]. The
+option `shadafile` allows you to the path where the `shada` file will be
+created. This can be combined with the option `exrc` in order to load a
+project-specific Lua configuration file for Neovim. Here is an example:
+
+```lua
+-- In your Neovim configuration:
+vim.opt.exrc = true
+vim.opt.secure = true
+
+-- /path/to/your/project/.nvim.lua:
+vim.opt.shadafile = ".vim/project.shada"
+
+-- Optionally, in the project's .gitignore or ~/.config/git/ignore:
+.vim
+```
+
+Read more about `exrc`: `:h exrc`.
+
+[shada-docs]: https://neovim.io/doc/user/starting.html#shada
 
 ### The `wshada` option
 
