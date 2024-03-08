@@ -28,7 +28,6 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 
 <!-- vim-markdown-toc GFM -->
 
-* [Planned features](#planned-features)
 * [Installation](#installation)
   * [Telescope integration](#telescope-integration)
   * [The `wshada` option](#the-wshada-option)
@@ -39,20 +38,6 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 * [Licensing](#licensing)
 
 <!-- vim-markdown-toc -->
-
-## Planned features
-
-- [x] Basic global mark management with `:Recall{Toggle,Mark,Unmark}` and
-      `:RecallClear`
-- [x] Basic global mark navigation with `:Recall{Next,Previous}`
-- [x] Sign column with a customizable character
-- [x] Support for Neovim 0.10.x and also 0.9.x and lower
-- [x] Telescope integration beyond the built-in `:Telescope marks` that allows
-      mark deletion and displaying only global marks
-- [ ] Improved stability by adding CI and testing using
-      [plenary][plenary-tests]
-
-[plenary-tests]: https://github.com/nvim-lua/plenary.nvim/blob/master/TESTS_README.md
 
 ## Installation
 
@@ -115,6 +100,7 @@ vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, sil
 ```lua
 {
   "fnune/recall.nvim",
+  version = "^1.0.0",
   config = function()
     local recall = require("recall")
 
