@@ -54,6 +54,11 @@ M.remove_mark_if_exists = function()
 end
 
 function M.set_global_mark()
+  if vim.api.nvim_buf_get_name(0) == "" then
+    print("Cannot set a global mark in an unsaved buffer")
+    return
+  end
+
   local mark = M.next_available_mark()
   if mark then
     vim.cmd("mark " .. mark)

@@ -1,5 +1,7 @@
 # 🔖 Recall
 
+![Tests](https://github.com/fnune/recall.nvim/actions/workflows/test.yml/badge.svg)
+
 Recall refines the use of [Neovim marks][marks] by focusing on global marks,
 streamlining their usage and enhancing their visibility and navigability.
 
