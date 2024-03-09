@@ -27,4 +27,4 @@ jobs:
 
       - name: Run tests
         run: |
-          nvim --headless -c "PlenaryBustedFile tests/init.lua"
+          nvim --headless -c 'PlenaryBustedDirectory tests/plenary/ { init = "./tests/init.test.lua" }'

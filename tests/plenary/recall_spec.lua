@@ -18,12 +18,39 @@ local function count_signs(buffer)
   return #signs
 end
 
+local function find_telescope_bufnr()
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+    if buftype == "prompt" then
+      return bufnr
+    end
+  end
+end
+local function inspect_telescope_picker()
+  vim.wait(1000, function()
+    return find_telescope_bufnr() ~= nil
+  end)
+  local telescope_action_state = require("telescope.actions.state")
+  local telescope_bufnr = find_telescope_bufnr()
+  return telescope_action_state.get_current_picker(telescope_bufnr)
+end
+
+local function inspect_telescope_results()
+  local finder = inspect_telescope_picker().finder
+  if finder ~= nil then
+    return finder.results
+  end
+  return {}
+end
+
 describe("Recall", function()
   local bufnr
   local line_count = 100
   local temp_paths = {}
 
   before_each(function()
+    local telescope = require("telescope")
+    telescope.setup({})
     recall.setup({})
 
     bufnr = vim.api.nvim_create_buf(true, false)
@@ -39,9 +66,13 @@ describe("Recall", function()
   end)
 
   after_each(function()
+    vim.cmd("bufdo! bdelete")
+    vim.cmd("delmarks A-Z")
+
     for _, temp_path in ipairs(temp_paths) do
       os.remove(temp_path)
     end
+
     temp_paths = {}
   end)
 
@@ -119,5 +150,31 @@ describe("Recall", function()
 
     recall.clear()
     assert.are.equal(count_signs(bufnr), 0)
+  end)
+
+  it("can list marks using Telescope", function()
+    recall.toggle()
+    place_cursor(10, 0)
+    recall.toggle()
+    place_cursor(20, 0)
+    recall.toggle()
+
+    vim.cmd("Telescope recall")
+
+    local results = inspect_telescope_results()
+
+    assert.are.equal(#results, 3)
+
+    assert.are.equal(results[1].ordinal, "A")
+    assert.are.equal(results[1].lnum, 1)
+    assert.are.equal(results[1].col, 0)
+
+    assert.are.equal(results[2].ordinal, "B")
+    assert.are.equal(results[2].lnum, 10)
+    assert.are.equal(results[2].col, 0)
+
+    assert.are.equal(results[3].ordinal, "C")
+    assert.are.equal(results[3].lnum, 20)
+    assert.are.equal(results[3].col, 0)
   end)
 end)
