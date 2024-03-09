@@ -129,7 +129,7 @@ To open the Recall Telescope picker, use `:Telecope recall`. You can pass a
 `theme` option with a Telescope built-in theme such as `:Telescope recall
 theme=ivy`.
 
-To change or unset the default mappings, use:
+To change or unset the default mappings, use an empty string:
 
 ```lua
 require("recall").setup({
@@ -137,7 +137,7 @@ require("recall").setup({
     mappings = {
       unmark_selected_entry = {
         normal = "d",
-        insert = nil,
+        insert = "",
       },
     },
   },
