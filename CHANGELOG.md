@@ -5,6 +5,23 @@ All notable changes to Recall will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/fnune/recall.nvim/releases/tag/1.1.0) - 2024-03-09
+
+### Added
+
+- Show mappings legend within Telescope picker
+
+### Changed
+
+- Fix recommendation on how to unset mappings for Telescope: previous
+  recommendation `nil` did not work with `tbl_{deep_}extend`, an empty string
+  will do
+
+### Fixed
+
+- Use `tbl_deep_extend` instead of `tbl_extend` to correctly merge user options
+  with defaults
+
 ## [1.0.0](https://github.com/fnune/recall.nvim/releases/tag/1.0.0) - 2024-03-08
 
 ### Added
