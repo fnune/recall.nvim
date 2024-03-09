@@ -51,23 +51,40 @@ M.extension = function(opts)
     end
   end
 
+  local function format_prompt_title()
+    local parts = { "Recall", "<CR> open" }
+
+    local unmark_normal = config.opts.telescope.mappings.unmark_selected_entry.normal
+    local unmark_insert = config.opts.telescope.mappings.unmark_selected_entry.insert
+
+    if unmark_insert ~= "" then
+      table.insert(parts, unmark_insert .. " unmark (i)")
+    end
+
+    if unmark_normal ~= "" then
+      table.insert(parts, unmark_normal .. " unmark (n)")
+    end
+
+    return table.concat(parts, " | ")
+  end
+
   telescope_pickers
     .new(opts, {
-      prompt_title = "Recall",
+      prompt_title = format_prompt_title(),
       results_title = "Global Marks",
       finder = create_finder(),
       previewer = telescope_conf.grep_previewer({}),
       sorter = telescope_conf.generic_sorter({}),
       attach_mappings = function(picker_bufnr, picker_map)
         local unmark_normal = config.opts.telescope.mappings.unmark_selected_entry.normal
-        if unmark_normal ~= nil then
+        if unmark_normal ~= "" then
           picker_map({ "n" }, unmark_normal, function()
             unmark_selected_entry(picker_bufnr)
           end)
         end
 
         local unmark_insert = config.opts.telescope.mappings.unmark_selected_entry.insert
-        if unmark_insert ~= nil then
+        if unmark_insert ~= "" then
           picker_map({ "i" }, unmark_insert, function()
             unmark_selected_entry(picker_bufnr)
           end)
