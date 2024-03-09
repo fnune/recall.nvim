@@ -101,7 +101,7 @@ vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, sil
 ```lua
 {
   "fnune/recall.nvim",
-  version = "^1.0.0",
+  version = "*",
   config = function()
     local recall = require("recall")
 
