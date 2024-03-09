@@ -28,3 +28,26 @@ jobs:
       - name: Run tests
         run: |
           nvim --headless -c 'PlenaryBustedDirectory tests/plenary/ { init = "./tests/init.test.lua" }'
+
+  lint:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: |
+          echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+          apk update
+          apk add --no-cache git stylua luacheck prettier@testing
+
+      - name: Run Luacheck
+        run: luacheck .
+
+      - name: Run Stylua
+        run: stylua --check .
+
+      - name: Run Prettier
+        run: prettier --check .

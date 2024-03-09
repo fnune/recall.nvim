@@ -1,0 +1,29 @@
+repos:
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: luacheck
+        entry: luacheck
+        language: system
+        types: [lua]
+        files: \.lua$
+        args: ["--no-color"]
+        pass_filenames: true
+
+      - id: stylua
+        name: stylua
+        entry: stylua
+        language: system
+        types: [lua]
+        files: \.lua$
+        args: ["--check"]
+        pass_filenames: true
+
+      - id: prettier
+        name: prettier
+        entry: prettier
+        language: system
+        types: [markdown]
+        files: \.(md|json|yml|yaml)$
+        args: ["--check"]
+        pass_filenames: true

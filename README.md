@@ -28,15 +28,15 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 
 <!-- vim-markdown-toc GFM -->
 
-* [Installation](#installation)
-  * [Telescope integration](#telescope-integration)
-  * [Project-specific global marks](#project-specific-global-marks)
-  * [The `wshada` option](#the-wshada-option)
-  * [Usage commands](#usage-commands)
-    * [Navigation logic](#navigation-logic)
-* [Inspirations](#inspirations)
-* [Contributions](#contributions)
-* [Licensing](#licensing)
+- [Installation](#installation)
+  - [Telescope integration](#telescope-integration)
+  - [Project-specific global marks](#project-specific-global-marks)
+  - [The `wshada` option](#the-wshada-option)
+  - [Usage commands](#usage-commands)
+    - [Navigation logic](#navigation-logic)
+- [Inspirations](#inspirations)
+- [Contributions](#contributions)
+- [Licensing](#licensing)
 
 <!-- vim-markdown-toc -->
 
@@ -230,6 +230,15 @@ materialize the ideas for Recall.
 ## Contributions
 
 You're welcome to contribute pull requests and well-crafted issues to Recall!
+
+Recall ships with a [`flake.nix`](./flake.nix) and [`.envrc`](./.envrc) to set
+up a development shell with development dependencies. You need
+[Nix](https://nix.dev/) in order to use it. If you're not using Nix, then
+simply read the dependencies listed in [`flake.nix`](./flake.nix) and install
+them on your system, or use
+[`.github/workflows/test.yml`](./.github/workflows/test.yml) as a guide.
+
+To format the code in this repository, run [`./format.sh`](./format.sh).
 
 ## Licensing
 
