@@ -61,7 +61,7 @@ end
 M.goto_mark = function(direction)
   local mark = M.find_mark(direction)
   if mark then
-    vim.cmd("edit " .. mark.file)
+    vim.cmd("silent buffer " .. mark.file)
     vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
   else
     print("No global marks set")
