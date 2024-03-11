@@ -22,7 +22,7 @@ M.opts = {
 function M.setup(opts)
   M.opts = vim.tbl_deep_extend("force", M.opts, opts or {})
 
-  vim.fn.sign_define("RecallMark", { text = M.opts.sign, texthl = M.opts.sign_highlight })
+  vim.fn.sign_define("RecallSign", { text = M.opts.sign, texthl = M.opts.sign_highlight })
 
   local augroup = vim.api.nvim_create_augroup("RecallRefreshSigns", { clear = true })
 

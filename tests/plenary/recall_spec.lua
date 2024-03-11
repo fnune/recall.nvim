@@ -14,7 +14,7 @@ local function place_cursor(line, column)
 end
 
 local function count_signs(buffer)
-  local signs = vim.fn.sign_getplaced(buffer, { name = "RecallMark" })[1].signs
+  local signs = vim.fn.sign_getplaced(buffer, { group = "RecallSigns" })[1].signs
   return #signs
 end
 

@@ -4,13 +4,13 @@ local utils = require("recall.utils")
 local M = {}
 
 M.refresh_signs = function()
-  vim.fn.sign_unplace("*", { group = "RecallMark" })
+  vim.fn.sign_unplace("RecallSigns")
 
   utils.for_each_global_mark(function(char, info)
     local bufnr = info.pos[1]
     local lnum = info.pos[2]
     if bufnr and bufnr > 0 and lnum then
-      vim.fn.sign_place(0, "", "RecallMark", bufnr, { lnum = lnum, priority = 10, id = string.byte(char) })
+      vim.fn.sign_place(0, "RecallSigns", "RecallSign", bufnr, { lnum = lnum, priority = 10, id = string.byte(char) })
     end
   end)
 end
