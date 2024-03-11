@@ -9,7 +9,7 @@ M.opts = {
     mappings = {
       unmark_selected_entry = {
         normal = "dd",
-        insert = "<C-m>",
+        insert = "<M-d>",
       },
     },
   },

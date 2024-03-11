@@ -60,7 +60,7 @@ require("recall").setup({
     mappings = {
       unmark_selected_entry = {
         normal = "dd",
-        insert = "<C-m>",
+        insert = "<M-d>",
       },
     },
   },
@@ -122,7 +122,7 @@ vim.keymap.set("n", "<leader>ml", ":Telescope recall<CR>", { noremap = true, sil
 
 If you have Telescope installed, Recall will loads its extension so that you
 can use `:Telescope recall`. Within the Recall Telescope picker, you can use
-`dd` in normal mode or `<C-m>` in insert mode to delete the selected global
+`dd` in normal mode or `<M-d>` in insert mode to delete the selected global
 mark.
 
 To open the Recall Telescope picker, use `:Telecope recall`. You can pass a

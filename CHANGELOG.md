@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed 'No write since last change' when trying to open a mark while the current buffer has unsaved changes
   (https://github.com/fnune/recall.nvim/issues/4)
+- Fixed bug in Telescope integration where hitting enter in insert mode would actually remove a mark instead of
+  navigating to it (https://github.com/fnune/recall.nvim/issues/6)
+  - This was happening because the default mapping was `<C-m>`, and as far as Vim/Neovim are concerned, `<C-m>` and
+    `<CR>` [are the same thing](https://groups.google.com/g/vim_dev/c/2bp9UdfZ63M/m/sajb9KM0pNYJ?pli=1)
+
+### Changed
+
+- The default mapping to delete marks from the Telescope extension is now `<M-d>`; see **Fixed**
 
 ## [1.1.0](https://github.com/fnune/recall.nvim/releases/tag/1.1.0) - 2024-03-09
 
