@@ -167,6 +167,21 @@ Here is an example to create a mapping:
 vim.keymap.set("n", "<leader>ml", require("recall.snacks").pick, { noremap = true, silent = true })
 ```
 
+To change or unset the default mappings, use an empty string:
+
+```lua
+require("recall").setup({
+  snacks = {
+    mappings = {
+      unmark_selected_entry = {
+        normal = "d",
+        insert = "",
+      },
+    },
+  },
+})
+```
+
 ### Project-specific global marks
 
 Neovim stores global mark information in the [`shada` file][shada-docs]. The
