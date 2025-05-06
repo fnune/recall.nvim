@@ -30,6 +30,7 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 
 - [Installation](#installation)
   - [Telescope integration](#telescope-integration)
+  - [Snacks Picker integration](#snacks-picker-integration)
   - [Project-specific global marks](#project-specific-global-marks)
   - [The `wshada` option](#the-wshada-option)
   - [Usage commands](#usage-commands)
@@ -154,6 +155,31 @@ require("recall").setup({
 })
 
 require("telescope").load_extension("recall")
+```
+
+### Snacks Picker integration
+
+You need to have Snacks Picker installed.
+The picker is available via `require("recall.snacks").pick`.
+Here is an example to create a mapping:
+
+```lua
+vim.keymap.set("n", "<leader>ml", require("recall.snacks").pick, { noremap = true, silent = true })
+```
+
+To change or unset the default mappings, use an empty string:
+
+```lua
+require("recall").setup({
+  snacks = {
+    mappings = {
+      unmark_selected_entry = {
+        normal = "d",
+        insert = "",
+      },
+    },
+  },
+})
 ```
 
 ### Project-specific global marks
