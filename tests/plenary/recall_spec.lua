@@ -221,28 +221,27 @@ describe("Recall", function()
     -- Enable reuse_opened_windows
     recall.setup({ reuse_opened_windows = true })
 
-    -- Place mark A in bufnr at line 10
-    vim.api.nvim_set_current_buf(bufnr)
-    place_cursor(10, 0)
-    recall.toggle()
-
-    -- Place mark B in bufnr2 at line 20
-    vim.api.nvim_set_current_buf(bufnr2)
-    place_cursor(20, 0)
-    recall.toggle()
-
     -- Create a split window showing bufnr
     vim.api.nvim_set_current_buf(bufnr)
     local win1 = vim.api.nvim_get_current_win()
-    vim.cmd("vsplit")
-    local win2 = vim.api.nvim_get_current_win()
+    local win2 = vim.api.nvim_open_win(bufnr2, true, { split = 'right' })
     assert.are.not_equal(win1, win2)
+
+    -- Place mark A in bufnr at line 10
+    vim.api.nvim_set_current_win(win1)
+    place_cursor(10, 1)
+    recall.mark()
+
+    -- Place mark B in bufnr2 at line 20
     vim.api.nvim_set_current_win(win2)
-    vim.api.nvim_set_current_buf(bufnr2)
+    place_cursor(20, 1)
+    recall.mark()
 
     -- From win2 (bufnr2), go to prev mark (should be mark A in bufnr)
     -- Should switch to win1 instead of changing buffer in win2
-    recall.goto_prev()
+    vim.api.nvim_set_current_win(win2)
+    place_cursor(20, 1)
+    recall.goto_next()
 
     local current_win = vim.api.nvim_get_current_win()
     local current_buf = vim.api.nvim_get_current_buf()
@@ -250,6 +249,16 @@ describe("Recall", function()
 
     assert.are.equal(current_win, win1, "Should reuse the window already displaying the target buffer")
     assert.are.equal(current_buf, bufnr)
-    assert.are.same(cursor_pos, { 10, 0 })
+    assert.are.same(cursor_pos, { 10, 1 })
+
+    recall.goto_next()
+
+    current_win = vim.api.nvim_get_current_win()
+    current_buf = vim.api.nvim_get_current_buf()
+    cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+
+    assert.are.equal(current_win, win2, "Should reuse the window already displaying the target buffer")
+    assert.are.equal(current_buf, bufnr2)
+    assert.are.same(cursor_pos, { 20, 1 })
   end)
 end)

@@ -66,7 +66,8 @@ M.goto_mark = function(direction)
   local mark = M.find_mark(direction)
   if mark then
     if M.opts.reuse_opened_windows then
-      local win_id_to_reuse = vim.fn.bufwinid(mark.file)
+      local bufnr = vim.fn.bufnr(mark.file)
+      local win_id_to_reuse = vim.fn.bufwinid(bufnr)
       if win_id_to_reuse ~= -1 then
         utils.set_cursor_for_mark_in_window(win_id_to_reuse, mark)
         return
