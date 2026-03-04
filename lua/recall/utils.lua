@@ -37,11 +37,11 @@ M.sorted_global_marks = function()
 end
 
 M.set_cursor_for_mark_in_window = function(window_id, mark)
+  vim.cmd("silent buffer " .. mark.file)
   vim.api.nvim_win_set_cursor(window_id, { mark.pos[2], mark.pos[3] })
 end
 
 M.set_cursor_for_mark_in_current_window = function(mark)
-  vim.cmd("silent buffer " .. mark.file)
   M.set_cursor_for_mark_in_window(0, mark)
 end
 

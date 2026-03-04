@@ -50,7 +50,7 @@ function M.setup(opts)
     end)
   end
 
-  require("recall.navigation").reuse_opened_windows = M.opts.reuse_opened_windows
+  require("recall.navigation").opts.reuse_opened_windows = M.opts.reuse_opened_windows
 end
 
 return M
