@@ -182,6 +182,21 @@ require("recall").setup({
 })
 ```
 
+### Reusing opened windows
+
+When navigating marks in a split-window layout, `recall` can reuse existing windows
+instead of switching buffers in the current window.
+
+```lua
+require("recall").setup({
+  reuse_opened_windows = true  -- default: false
+})
+```
+
+When enabled, `recall` first checks if the target mark's buffer is already open in
+another window. If so, it focuses that window and moves the cursor there. Otherwise,
+it falls back to the default behavior of switching buffers in the current window.
+
 ### Project-specific global marks
 
 Neovim stores global mark information in the [`shada` file][shada-docs]. The
@@ -269,3 +284,4 @@ To format the code in this repository, run [`./format.sh`](./format.sh).
 ## Licensing
 
 [The MIT license](./LICENSE.md).
+

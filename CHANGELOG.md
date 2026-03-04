@@ -5,6 +5,14 @@ All notable changes to Recall will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/fnune/recall.nvim/releases/tag/1.3.0) - 2026-03-04
+
+### Added
+
+- New `reuse_opened_windows` option (default: `false`). When enabled, navigation
+  reuses existing windows displaying the target buffer instead of switching buffers
+  in the current window. Useful for split-window workflows.
+
 ## [1.2.0](https://github.com/fnune/recall.nvim/releases/tag/1.2.0) - 2025-05-28
 
 ### Added
