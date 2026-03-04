@@ -131,20 +131,27 @@ describe("Recall", function()
     place_cursor(unpack(c_pos))
     recall.toggle()
 
-    recall.goto_prev()
-    assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
+    for _, reuse_opened_windows in ipairs({ true, false }) do
+      require('recall.navigation').opts.reuse_opened_windows = reuse_opened_windows
 
-    recall.goto_prev()
-    assert.are.same(a_pos, vim.api.nvim_win_get_cursor(0))
+      recall.goto_prev()
+      assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
 
-    recall.goto_next()
-    assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
+      recall.goto_prev()
+      assert.are.same(a_pos, vim.api.nvim_win_get_cursor(0))
 
-    recall.goto_next()
-    assert.are.same(c_pos, vim.api.nvim_win_get_cursor(0))
+      recall.goto_next()
+      assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
 
-    recall.goto_prev()
-    assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
+      recall.goto_next()
+      assert.are.same(c_pos, vim.api.nvim_win_get_cursor(0))
+
+      recall.goto_prev()
+      assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
+
+      recall.goto_next()
+      assert.are.same(c_pos, vim.api.nvim_win_get_cursor(0))
+    end
   end)
 
   it("can clear all marks", function()
@@ -206,7 +213,7 @@ describe("Recall", function()
   end)
 
   it("reuses opened windows when reuse_opened_windows is enabled", function()
-    -- Create a second buffer
+    -- Create a second buffer for a second window
     local bufnr2 = vim.api.nvim_create_buf(true, false)
     set_lines(bufnr2, line_count)
     local temp_path2 = luv.os_tmpdir() .. "/nvim-recall-test2-" .. luv.hrtime() .. ".txt"
@@ -218,27 +225,21 @@ describe("Recall", function()
     vim.api.nvim_buf_set_option(bufnr2, "modified", false)
     vim.cmd("w")
 
-    -- Enable reuse_opened_windows
     recall.setup({ reuse_opened_windows = true })
 
-    -- Create a split window showing bufnr
     vim.api.nvim_set_current_buf(bufnr)
     local win1 = vim.api.nvim_get_current_win()
     local win2 = vim.api.nvim_open_win(bufnr2, true, { split = 'right' })
     assert.are.not_equal(win1, win2)
 
-    -- Place mark A in bufnr at line 10
     vim.api.nvim_set_current_win(win1)
     place_cursor(10, 1)
     recall.mark()
 
-    -- Place mark B in bufnr2 at line 20
     vim.api.nvim_set_current_win(win2)
     place_cursor(20, 1)
     recall.mark()
 
-    -- From win2 (bufnr2), go to prev mark (should be mark A in bufnr)
-    -- Should switch to win1 instead of changing buffer in win2
     vim.api.nvim_set_current_win(win2)
     place_cursor(20, 1)
     recall.goto_next()
