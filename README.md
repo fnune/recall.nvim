@@ -31,6 +31,7 @@ _Telescope integration using `:Telescope recall theme=ivy`._
 - [Installation](#installation)
   - [Telescope integration](#telescope-integration)
   - [Snacks Picker integration](#snacks-picker-integration)
+  - [Snacks statuscolumn compatibility](#snacks-statuscolumn-compatibility)
   - [Project-specific global marks](#project-specific-global-marks)
   - [The `wshada` option](#the-wshada-option)
   - [Usage commands](#usage-commands)
@@ -178,6 +179,19 @@ require("recall").setup({
         insert = "",
       },
     },
+  },
+})
+```
+
+### Snacks statuscolumn compatibility
+
+If you use Snacks statuscolumn and Recall's signs aren't visible (mark letters
+appear instead), configure Snacks to prioritize signs:
+
+```lua
+require("snacks").setup({
+  statuscolumn = {
+    left = { "sign", "mark" },
   },
 })
 ```
