@@ -271,4 +271,3 @@ To format the code in this repository, run [`./format.sh`](./format.sh).
 ## Licensing
 
 [The MIT license](./LICENSE.md).
-
