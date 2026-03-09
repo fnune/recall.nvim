@@ -2,10 +2,6 @@ local utils = require("recall.utils")
 
 local M = {}
 
-M.opts = {
-  reuse_opened_windows = false,
-}
-
 M.latest_mark_from_jumplist = function(marks)
   local jumplist = vim.fn.getjumplist()
   for i = #jumplist[1], 1, -1 do
@@ -65,15 +61,16 @@ end
 M.goto_mark = function(direction)
   local mark = M.find_mark(direction)
   if mark then
-    if M.opts.reuse_opened_windows then
-      local bufnr = vim.fn.bufnr(mark.file)
-      local win_id_to_reuse = vim.fn.bufwinid(bufnr)
-      if win_id_to_reuse ~= -1 then
-        utils.set_cursor_for_mark_in_window(win_id_to_reuse, mark)
-        return
-      end
+    local bufnr = vim.fn.bufnr(mark.file)
+    if bufnr == -1 then
+      vim.cmd("silent buffer " .. mark.file) -- loads buffer if not loaded at all
     end
-    utils.set_cursor_for_mark_in_current_window(mark)
+    local window_id_to_reuse = vim.fn.bufwinid(bufnr)
+    if window_id_to_reuse ~= -1 then
+      utils.set_cursor_for_mark_in_window(window_id_to_reuse, mark)
+    else
+      utils.set_cursor_for_mark_in_current_window(mark)
+    end
   else
     print("No global marks set")
   end

@@ -44,7 +44,6 @@ M.set_cursor_for_mark_in_window = function(window_id, mark)
 end
 
 M.set_cursor_for_mark_in_current_window = function(mark)
-  vim.cmd("silent buffer " .. mark.file)
   M.set_cursor_for_mark_in_window(0, mark)
 end
 

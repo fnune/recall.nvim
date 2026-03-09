@@ -3,7 +3,6 @@ local M = {}
 M.opts = {
   sign = "",
   sign_highlight = "@comment.note",
-  reuse_opened_windows = false,
 
   telescope = {
     autoload = true,
@@ -49,8 +48,6 @@ function M.setup(opts)
       require("recall.telescope").autoload()
     end)
   end
-
-  require("recall.navigation").opts.reuse_opened_windows = M.opts.reuse_opened_windows
 end
 
 return M

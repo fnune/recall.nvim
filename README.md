@@ -12,6 +12,8 @@ streamlining their usage and enhancing their visibility and navigability.
   circumventing the need for direct letter references.
 - Simplifies mark setting and removal with `:RecallToggle`, abstracting away
   the burden of choosing and remembering specific letters.
+- When navigating marks in a split-window layout, `recall` reuses existing windows
+instead of switching buffers in the current window.
 
 Recall attempts to eliminate the cognitive overhead associated with mark
 management, enabling you to focus on your workflow, not on mark administration.
@@ -181,21 +183,6 @@ require("recall").setup({
   },
 })
 ```
-
-### Reusing opened windows
-
-When navigating marks in a split-window layout, `recall` can reuse existing windows
-instead of switching buffers in the current window.
-
-```lua
-require("recall").setup({
-  reuse_opened_windows = true  -- default: false
-})
-```
-
-When enabled, `recall` first checks if the target mark's buffer is already open in
-another window. If so, it focuses that window and moves the cursor there. Otherwise,
-it falls back to the default behavior of switching buffers in the current window.
 
 ### Project-specific global marks
 
