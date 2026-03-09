@@ -40,7 +40,7 @@ M.set_cursor_for_mark_in_window = function(window_id, mark)
   if window_id ~= 0 then
     vim.api.nvim_set_current_win(window_id)
   end
-  vim.api.nvim_win_set_cursor(window_id, { mark.pos[2], mark.pos[3] })
+  vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
 end
 
 M.set_cursor_for_mark_in_current_window = function(mark)
