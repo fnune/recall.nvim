@@ -140,7 +140,6 @@ describe("Recall", function()
     place_cursor(unpack(c_pos))
     recall.toggle()
 
-
     recall.goto_prev()
     assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
 
