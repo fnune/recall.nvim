@@ -220,10 +220,10 @@ describe("Recall", function()
 
   it("reuses opened windows when reuse_opened_windows is enabled", function()
     local bufnr1 = create_temp_buffer()
-    local win1 = vim.api.nvim_open_win(bufnr1, true, { split = 'left' })
+    local win1 = vim.api.nvim_open_win(bufnr1, true, { split = "left" })
 
     local bufnr2 = create_temp_buffer()
-    local win2 = vim.api.nvim_open_win(bufnr2, true, { split = 'right' })
+    local win2 = vim.api.nvim_open_win(bufnr2, true, { split = "right" })
     assert.are.not_equal(win1, win2)
 
     vim.api.nvim_set_current_win(win1)
