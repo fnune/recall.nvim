@@ -61,8 +61,16 @@ end
 M.goto_mark = function(direction)
   local mark = M.find_mark(direction)
   if mark then
-    vim.cmd("silent buffer " .. mark.file)
-    vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
+    local bufnr = vim.fn.bufnr(mark.file)
+    if bufnr == -1 then
+      vim.cmd("silent buffer " .. mark.file) -- loads buffer if not loaded at all
+    end
+    local window_id_to_reuse = vim.fn.bufwinid(bufnr)
+    if window_id_to_reuse ~= -1 then
+      utils.set_cursor_for_mark_in_window(window_id_to_reuse, mark)
+    else
+      utils.set_cursor_for_mark_in_current_window(mark)
+    end
   else
     print("No global marks set")
   end

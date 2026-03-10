@@ -49,14 +49,10 @@ describe("Recall", function()
   local temp_paths = {}
   local cwd = vim.fn.getcwd()
 
-  before_each(function()
-    local telescope = require("telescope")
-    telescope.setup({})
-    recall.setup({})
-
-    bufnr = vim.api.nvim_create_buf(true, false)
-    vim.api.nvim_set_current_buf(bufnr)
-    set_lines(bufnr, line_count)
+  local function create_temp_buffer()
+    local _bufnr = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_set_current_buf(_bufnr)
+    set_lines(_bufnr, line_count)
 
     local temp_path = luv.os_tmpdir() .. "/nvim-recall-test-" .. luv.hrtime() .. ".txt"
     if jit and jit.os == "OSX" then
@@ -65,12 +61,14 @@ describe("Recall", function()
     end
     table.insert(temp_paths, temp_path)
 
-    vim.api.nvim_buf_set_name(bufnr, temp_path)
-    vim.api.nvim_buf_set_option(bufnr, "modified", false)
+    vim.api.nvim_buf_set_name(_bufnr, temp_path)
+    vim.api.nvim_buf_set_option(_bufnr, "modified", false)
     vim.cmd("w")
-  end)
 
-  after_each(function()
+    return _bufnr
+  end
+
+  local function remove_temp_buffers_and_marks()
     vim.cmd("bufdo! bdelete")
     vim.cmd("delmarks A-Z")
 
@@ -80,6 +78,17 @@ describe("Recall", function()
 
     temp_paths = {}
     vim.api.nvim_set_current_dir(cwd)
+  end
+
+  before_each(function()
+    local telescope = require("telescope")
+    telescope.setup({})
+    recall.setup({})
+    bufnr = create_temp_buffer()
+  end)
+
+  after_each(function()
+    remove_temp_buffers_and_marks()
   end)
 
   it("can toggle marks and show/hide signs", function()
@@ -145,6 +154,9 @@ describe("Recall", function()
 
     recall.goto_prev()
     assert.are.same(b_pos, vim.api.nvim_win_get_cursor(0))
+
+    recall.goto_next()
+    assert.are.same(c_pos, vim.api.nvim_win_get_cursor(0))
   end)
 
   it("can clear all marks", function()
@@ -203,5 +215,47 @@ describe("Recall", function()
     assert.are.equal(results[3].ordinal, "C:" .. vim.fn.fnamemodify(temp_paths[1], ":p:.") .. ":20")
     assert.are.equal(results[3].lnum, 20)
     assert.are.equal(results[3].col, 0)
+  end)
+
+  it("reuses opened windows when reuse_opened_windows is enabled", function()
+    local bufnr1 = create_temp_buffer()
+    local win1 = vim.api.nvim_open_win(bufnr1, true, { split = "left" })
+
+    local bufnr2 = create_temp_buffer()
+    local win2 = vim.api.nvim_open_win(bufnr2, true, { split = "right" })
+    assert.are.not_equal(win1, win2)
+
+    vim.api.nvim_set_current_win(win1)
+    vim.api.nvim_set_current_buf(bufnr1)
+    place_cursor(10, 1)
+    recall.mark()
+
+    vim.api.nvim_set_current_win(win2)
+    vim.api.nvim_set_current_buf(bufnr2)
+    place_cursor(20, 1)
+    recall.mark()
+
+    vim.api.nvim_set_current_win(win2)
+    vim.api.nvim_set_current_buf(bufnr2)
+    place_cursor(20, 1)
+    recall.goto_next()
+
+    local current_win = vim.api.nvim_get_current_win()
+    local current_buf = vim.api.nvim_get_current_buf()
+    local cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+
+    assert.are.equal(current_win, win1, "Should reuse the window already displaying the target buffer")
+    assert.are.equal(current_buf, bufnr1)
+    assert.are.same(cursor_pos, { 10, 1 })
+
+    recall.goto_next()
+
+    current_win = vim.api.nvim_get_current_win()
+    current_buf = vim.api.nvim_get_current_buf()
+    cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+
+    assert.are.equal(current_win, win2, "Should reuse the window already displaying the target buffer")
+    assert.are.equal(current_buf, bufnr2)
+    assert.are.same(cursor_pos, { 20, 1 })
   end)
 end)

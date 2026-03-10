@@ -12,6 +12,8 @@ streamlining their usage and enhancing their visibility and navigability.
   circumventing the need for direct letter references.
 - Simplifies mark setting and removal with `:RecallToggle`, abstracting away
   the burden of choosing and remembering specific letters.
+- When navigating marks in a split-window layout, `recall` reuses existing windows
+  instead of switching buffers in the current window.
 
 Recall attempts to eliminate the cognitive overhead associated with mark
 management, enabling you to focus on your workflow, not on mark administration.
