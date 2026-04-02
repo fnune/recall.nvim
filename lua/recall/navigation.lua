@@ -65,9 +65,9 @@ M.goto_mark = function(direction)
     if bufnr == -1 then
       vim.cmd("silent buffer " .. mark.file) -- loads buffer if not loaded at all
     end
-    local window_id_to_reuse = vim.fn.bufwinid(bufnr)
-    if window_id_to_reuse ~= -1 then
-      utils.set_cursor_for_mark_in_window(window_id_to_reuse, mark)
+    local bufloc = utils.find_first_buf_location(bufnr)
+    if bufloc ~= nil then
+      utils.set_cursor_for_mark_in_location(bufloc.tab, bufloc.win, mark)
     else
       utils.set_cursor_for_mark_in_current_window(mark)
     end

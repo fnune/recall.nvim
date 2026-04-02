@@ -36,7 +36,39 @@ M.sorted_global_marks = function()
   return marks
 end
 
-M.set_cursor_for_mark_in_window = function(window_id, mark)
+M.find_buf_locations = function(bufnr)
+  local results = {}
+
+  if bufnr == -1 then
+    return results
+  end
+
+  for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      if vim.api.nvim_win_get_buf(win) == bufnr then
+        table.insert(results, {
+          tab = tab,
+          win = win,
+        })
+      end
+    end
+  end
+
+  return results
+end
+
+M.find_first_buf_location = function(bufnr)
+  local locations = M.find_buf_locations(bufnr)
+  if #locations == 0 then
+    return nil
+  end
+  return results[1]
+end
+
+M.set_cursor_for_mark_in_location = function(tab_id, window_id, mark)
+  if tab_id ~= 0 then
+    vim.api.nvim_set_current_tabpage(tab_id)
+  end
   if window_id ~= 0 then
     vim.api.nvim_set_current_win(window_id)
   end
@@ -44,7 +76,7 @@ M.set_cursor_for_mark_in_window = function(window_id, mark)
 end
 
 M.set_cursor_for_mark_in_current_window = function(mark)
-  M.set_cursor_for_mark_in_window(0, mark)
+  M.set_cursor_for_mark_in_location(0, 0, mark)
 end
 
 return M
