@@ -62,7 +62,7 @@ M.find_first_buf_location = function(bufnr)
   if #locations == 0 then
     return nil
   end
-  return results[1]
+  return locations[1]
 end
 
 M.set_cursor_for_mark_in_location = function(tab_id, window_id, mark)
