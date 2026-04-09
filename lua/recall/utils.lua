@@ -36,33 +36,28 @@ M.sorted_global_marks = function()
   return marks
 end
 
-M.find_buf_locations = function(bufnr)
-  local results = {}
-
+M.find_first_buf_location = function(bufnr)
   if bufnr == -1 then
-    return results
+    return nil
   end
+
+  local current_tab = vim.api.nvim_get_current_tabpage()
+  local first = nil
 
   for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
       if vim.api.nvim_win_get_buf(win) == bufnr then
-        table.insert(results, {
-          tab = tab,
-          win = win,
-        })
+        if tab == current_tab then
+          return { tab = tab, win = win }
+        end
+        if first == nil then
+          first = { tab = tab, win = win }
+        end
       end
     end
   end
 
-  return results
-end
-
-M.find_first_buf_location = function(bufnr)
-  local locations = M.find_buf_locations(bufnr)
-  if #locations == 0 then
-    return nil
-  end
-  return locations[1]
+  return first
 end
 
 M.set_cursor_for_mark_in_location = function(tab_id, window_id, mark)
