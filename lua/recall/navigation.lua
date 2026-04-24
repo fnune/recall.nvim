@@ -61,16 +61,12 @@ end
 M.goto_mark = function(direction)
   local mark = M.find_mark(direction)
   if mark then
-    local bufnr = vim.fn.bufnr(mark.file)
-    if bufnr == -1 then
+    local buf_nr = vim.fn.bufnr(mark.file)
+    if buf_nr == -1 then
       vim.cmd("silent buffer " .. mark.file) -- loads buffer if not loaded at all
     end
-    local bufloc = utils.find_first_buf_location(bufnr)
-    if bufloc ~= nil then
-      utils.set_cursor_for_mark_in_location(bufloc.tab, bufloc.win, mark)
-    else
-      utils.set_cursor_for_mark_in_current_window(mark)
-    end
+    local buf_location = utils.find_first_buf_location(buf_nr)
+    utils.set_cursor_for_mark(buf_location, mark)
   else
     print("No global marks set")
   end

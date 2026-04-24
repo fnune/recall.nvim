@@ -60,18 +60,16 @@ M.find_first_buf_location = function(bufnr)
   return first
 end
 
-M.set_cursor_for_mark_in_location = function(tab_id, window_id, mark)
-  if tab_id ~= 0 then
-    vim.api.nvim_set_current_tabpage(tab_id)
-  end
-  if window_id ~= 0 then
-    vim.api.nvim_set_current_win(window_id)
+M.set_cursor_for_mark = function(buf_location, mark)
+  if buf_location then
+    if buf_location.tab then
+      vim.api.nvim_set_current_tabpage(buf_location.tab)
+    end
+    if buf_location.win then
+      vim.api.nvim_set_current_win(buf_location.win)
+    end
   end
   vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
-end
-
-M.set_cursor_for_mark_in_current_window = function(mark)
-  M.set_cursor_for_mark_in_location(0, 0, mark)
 end
 
 return M
