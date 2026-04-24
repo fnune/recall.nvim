@@ -258,4 +258,47 @@ describe("Recall", function()
     assert.are.equal(current_buf, bufnr2)
     assert.are.same(cursor_pos, { 20, 1 })
   end)
+
+  it("reuses opened windows across tab pages", function()
+    local bufnr1 = create_temp_buffer()
+    place_cursor(10, 1)
+    recall.mark()
+    local tab1 = vim.api.nvim_get_current_tabpage()
+    local win1 = vim.api.nvim_get_current_win()
+
+    vim.cmd("tabnew")
+    local bufnr2 = create_temp_buffer()
+    place_cursor(20, 1)
+    recall.mark()
+    local tab2 = vim.api.nvim_get_current_tabpage()
+    local win2 = vim.api.nvim_get_current_win()
+
+    assert.are.not_equal(tab1, tab2)
+
+    -- From tab2, navigate to the mark in tab1
+    recall.goto_next()
+
+    local current_tab = vim.api.nvim_get_current_tabpage()
+    local current_win = vim.api.nvim_get_current_win()
+    local current_buf = vim.api.nvim_get_current_buf()
+    local cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+
+    assert.are.equal(current_tab, tab1, "Should switch to the tab page displaying the target buffer")
+    assert.are.equal(current_win, win1, "Should reuse the window in the other tab page")
+    assert.are.equal(current_buf, bufnr1)
+    assert.are.same(cursor_pos, { 10, 1 })
+
+    -- Navigate back to the mark in tab2
+    recall.goto_next()
+
+    current_tab = vim.api.nvim_get_current_tabpage()
+    current_win = vim.api.nvim_get_current_win()
+    current_buf = vim.api.nvim_get_current_buf()
+    cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+
+    assert.are.equal(current_tab, tab2, "Should switch back to the other tab page")
+    assert.are.equal(current_win, win2, "Should reuse the window in the other tab page")
+    assert.are.equal(current_buf, bufnr2)
+    assert.are.same(cursor_pos, { 20, 1 })
+  end)
 end)

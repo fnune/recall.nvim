@@ -36,15 +36,40 @@ M.sorted_global_marks = function()
   return marks
 end
 
-M.set_cursor_for_mark_in_window = function(window_id, mark)
-  if window_id ~= 0 then
-    vim.api.nvim_set_current_win(window_id)
+M.find_first_buf_location = function(bufnr)
+  if bufnr == -1 then
+    return nil
   end
-  vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
+
+  local current_tab = vim.api.nvim_get_current_tabpage()
+  local first = nil
+
+  for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      if vim.api.nvim_win_get_buf(win) == bufnr then
+        if tab == current_tab then
+          return { tab = tab, win = win }
+        end
+        if first == nil then
+          first = { tab = tab, win = win }
+        end
+      end
+    end
+  end
+
+  return first
 end
 
-M.set_cursor_for_mark_in_current_window = function(mark)
-  M.set_cursor_for_mark_in_window(0, mark)
+M.set_cursor_for_mark = function(buf_location, mark)
+  if buf_location then
+    if buf_location.tab then
+      vim.api.nvim_set_current_tabpage(buf_location.tab)
+    end
+    if buf_location.win then
+      vim.api.nvim_set_current_win(buf_location.win)
+    end
+  end
+  vim.api.nvim_win_set_cursor(0, { mark.pos[2], mark.pos[3] })
 end
 
 return M
