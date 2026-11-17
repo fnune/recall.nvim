@@ -6,48 +6,33 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
-    runs-on: ubuntu-latest
-    container: alpine:latest
-
+    runs-on: ubuntu-26.04
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies and Neovim
-        run: |
-          apk update
-          apk add neovim git curl
-
-      - name: Install Plenary
-        run: |
-          mkdir -p ~/.config/nvim/pack/plenary/start
-          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git ~/.config/nvim/pack/plenary/start/plenary.nvim
-
-      - name: Run tests
-        run: |
-          nvim --headless -c 'PlenaryBustedDirectory tests/plenary/ { init = "./tests/init.test.lua" }'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fnune/ci@395771a1db7789d50e1070d49e746465de179042
+        with:
+          dev-shell: ""
+          command: |
+            git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git ~/.config/nvim/pack/plenary/start/plenary.nvim
+            nix shell github:NixOS/nixpkgs/b349185bb79c7cf7ad8ea8c097931730bf473c71#neovim --command \
+              nvim --headless -c 'PlenaryBustedDirectory tests/plenary/ { init = "./tests/init.test.lua" }'
 
   lint:
-    runs-on: ubuntu-latest
-    container: alpine:latest
-
+    runs-on: ubuntu-26.04
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Install system dependencies
-        run: |
-          echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-          apk update
-          apk add --no-cache git stylua luacheck prettier@testing
-
-      - name: Run Luacheck
-        run: luacheck .
-
-      - name: Run Stylua
-        run: stylua --check .
-
-      - name: Run Prettier
-        run: prettier --check .
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fnune/ci@395771a1db7789d50e1070d49e746465de179042
+        with:
+          command: |
+            luacheck .
+            stylua --check .
+            prettier --check .
